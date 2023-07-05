@@ -1,0 +1,24 @@
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: 'This deploys to Production'
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Azure Login
+      uses: Azure/login@v1.4.3
+      with:
+        creds: ${{ secrets.AZURE_SP }}
+        
+    - name: Deploy Azure Resource Manager (ARM) Template
+      uses: Azure/arm-deploy@v1.0.6
+      with:
+        scope: 'resourcegroup'
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: ./testrepo/ARMTemplateForFactory.json
+        deploymentMode: Incremental
+        parameters: factoryName= ${{ ADF_NAME }}
