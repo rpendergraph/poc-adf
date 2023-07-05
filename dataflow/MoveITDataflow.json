@@ -13,7 +13,14 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SelectColumns"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id as integer,",
@@ -67,7 +74,13 @@
 				"     skipInitialLoad: false,",
 				"     waterMarkColumn: 'id',",
 				"     isolationLevel: 'READ_COMMITTED',",
-				"     format: 'table') ~> MoveITEvents"
+				"     format: 'table') ~> MoveITEvents",
+				"MoveITEvents select(mapColumn(",
+				"          jsondata",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+				"SelectColumns derive(column1 = ERROR_FUNCTION('')) ~> derivedColumn1"
 			]
 		}
 	}
