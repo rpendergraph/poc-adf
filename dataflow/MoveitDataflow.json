@@ -1,0 +1,115 @@
+{
+	"name": "MoveitDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "moveit_events",
+						"type": "DatasetReference"
+					},
+					"name": "MoveitSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "SelectJSON"
+				},
+				{
+					"name": "ParseJSON"
+				},
+				{
+					"name": "UnwrapIPSwitchKey"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          createdon as timestamp,",
+				"          updatedon as timestamp,",
+				"          jsondata as string,",
+				"          svrguid as string,",
+				"          dataacqguid as string,",
+				"          desthost as string,",
+				"          desthosttype as integer,",
+				"          destid as integer,",
+				"          destlocation as string,",
+				"          direction as string,",
+				"          duration as integer,",
+				"          origrowid as integer,",
+				"          handlertype as string,",
+				"          identity as string,",
+				"          identityid as integer,",
+				"          initialid as integer,",
+				"          initiator as string,",
+				"          objectdestbytes as integer,",
+				"          objectdestname as string,",
+				"          objectid as integer,",
+				"          objectname as integer,",
+				"          objectsourcebytes as integer,",
+				"          objectsourcename as string,",
+				"          operation as string,",
+				"          operationtype as string,",
+				"          orgid as integer,",
+				"          orgname as string,",
+				"          svrname as string,",
+				"          svrsubtype as string,",
+				"          svrtype as string,",
+				"          sourcehost as string,",
+				"          sourcehosttype as integer,",
+				"          sourceid as integer,",
+				"          sourcelocation as string,",
+				"          status as integer,",
+				"          statusmsg as string,",
+				"          operationendts as timestamp,",
+				"          workflowid as string,",
+				"          createdby as integer,",
+				"          updatedby as integer,",
+				"          naturaluniquekey as string,",
+				"          custom as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     enableCdc: true,",
+				"     mode: 'read',",
+				"     skipInitialLoad: false,",
+				"     waterMarkColumn: 'id',",
+				"     isolationLevel: 'READ_COMMITTED',",
+				"     format: 'table') ~> MoveitSource",
+				"MoveitSource select(mapColumn(",
+				"          json_string = jsondata",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectJSON",
+				"SelectJSON parse(eventObject = json_string ? (com_ipswitch_moveit_ftoperations as (agentGuid as string,",
+				"          destHost as string,",
+				"          destHostType as integer,",
+				"          destId as integer,",
+				"          destLocation as string,",
+				"          direction as string,",
+				"          duration as integer,",
+				"          entityId as integer,",
+				"          handlerType as string,",
+				"          identity as string,",
+				"          identityId as integer,",
+				"          initialId as integer,",
+				"          initiator as string,",
+				"          objectDestBytes as integer,",
+				"          objectDestName as string,",
+				"          objectSourceBytes as integer,",
+				"          objectSourceName as string,",
+				"          operation as string,",
+				"          operationType as string)),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> ParseJSON",
+				"ParseJSON select(mapColumn(",
+				"          eventObject = eventObject.com_ipswitch_moveit_ftoperations",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey"
+			]
+		}
+	}
+}
