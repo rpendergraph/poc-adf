@@ -22,6 +22,9 @@
 				},
 				{
 					"name": "UnwrapIPSwitchKey"
+				},
+				{
+					"name": "stringify1"
 				}
 			],
 			"scriptLines": [
@@ -108,7 +111,9 @@
 				"          eventObject = eventObject.com_ipswitch_moveit_ftoperations",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey"
+				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey",
+				"UnwrapIPSwitchKey stringify(eventObject = eventObject ? string,",
+				"     format: 'json') ~> stringify1"
 			]
 		}
 	}
