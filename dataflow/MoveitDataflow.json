@@ -24,7 +24,7 @@
 					"name": "UnwrapIPSwitchKey"
 				},
 				{
-					"name": "stringify1"
+					"name": "ToStrings"
 				}
 			],
 			"scriptLines": [
@@ -113,7 +113,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey",
 				"UnwrapIPSwitchKey stringify(eventObject = eventObject ? string,",
-				"     format: 'json') ~> stringify1"
+				"     format: 'json') ~> ToStrings"
 			]
 		}
 	}
