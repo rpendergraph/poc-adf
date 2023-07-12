@@ -18,7 +18,7 @@
 						"referenceName": "AzureFunction",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "AzureFunction"
 				}
 			],
 			"transformations": [
@@ -35,7 +35,7 @@
 					"name": "ToStrings"
 				},
 				{
-					"name": "aggregate1"
+					"name": "AggregateBody"
 				}
 			],
 			"scriptLines": [
@@ -125,8 +125,8 @@
 				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey",
 				"UnwrapIPSwitchKey stringify(eventObject = eventObject ? string,",
 				"     format: 'json') ~> ToStrings",
-				"ToStrings aggregate(body = collect(eventObject)) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"ToStrings aggregate(body = collect(eventObject)) ~> AggregateBody",
+				"AggregateBody sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -136,7 +136,7 @@
 				"     timeout: 30,",
 				"     requestFormat: ['type' -> 'json'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> AzureFunction"
 			]
 		}
 	}
