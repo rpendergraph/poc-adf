@@ -25,6 +25,9 @@
 				},
 				{
 					"name": "ToStrings"
+				},
+				{
+					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -113,7 +116,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey",
 				"UnwrapIPSwitchKey stringify(eventObject = eventObject ? string,",
-				"     format: 'json') ~> ToStrings"
+				"     format: 'json') ~> ToStrings",
+				"ToStrings aggregate(body = collect(eventObject)) ~> aggregate1"
 			]
 		}
 	}
