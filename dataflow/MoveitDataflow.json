@@ -12,7 +12,15 @@
 					"name": "MoveitSource"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureFunction",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectJSON"
@@ -117,7 +125,22 @@
 				"     skipDuplicateMapOutputs: true) ~> UnwrapIPSwitchKey",
 				"UnwrapIPSwitchKey stringify(eventObject = eventObject ? string,",
 				"     format: 'json') ~> ToStrings",
-				"ToStrings aggregate(body = collect(eventObject)) ~> aggregate1"
+				"ToStrings aggregate(body = collect(eventObject)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:true,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:true,",
+				"     insertHttpMethod: 'POST',",
+				"     deleteHttpMethod: 'DELETE',",
+				"     upsertHttpMethod: 'PUT',",
+				"     updateHttpMethod: 'PATCH',",
+				"     timeout: 30,",
+				"     requestInterval: 0,",
+				"     requestFormat: ['type' -> 'json'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

@@ -1,0 +1,12 @@
+{
+	"name": "AzureFunction",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureIngestFunction",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
