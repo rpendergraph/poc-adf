@@ -28,38 +28,6 @@
 						"customizedCheckpointKey": "03baa0f8-0b44-42fb-ac99-4075a7fa6049"
 					}
 				}
-			},
-			{
-				"name": "Azure Function1",
-				"type": "AzureFunctionActivity",
-				"dependsOn": [
-					{
-						"activity": "Moveit Pipeline",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"functionName": "pocingestfunc",
-					"method": "POST",
-					"body": {
-						"value": "body",
-						"type": "Expression"
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureFunction1",
-					"type": "LinkedServiceReference"
-				}
 			}
 		],
 		"annotations": []
